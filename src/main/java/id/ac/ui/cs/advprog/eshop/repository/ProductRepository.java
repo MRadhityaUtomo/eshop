@@ -41,11 +41,9 @@ public class ProductRepository {
     }
 
     public void deleteProduct(String id) {
-        Iterator<Product> productIterator = findAll();
-        while (productIterator.hasNext()){
-            Product product = productIterator.next();
-            if (product.getProductId().equals(id)){
-                productIterator.remove();
+        for (int i = 0; i < productData.size(); i++) {
+            if (productData.get(i).getProductId().equals(id)) {
+                productData.remove(i);
                 return;
             }
         }
