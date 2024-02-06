@@ -11,12 +11,14 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+    private long productId = 1;
 
     @Autowired
     private ProductRepository productRepository;
 
     @Override
     public Product create(Product product) {
+        product.setProductId(String.valueOf(productId)); productId++;
         productRepository.create(product);
         return product;
     }
@@ -28,5 +30,15 @@ public class ProductServiceImpl implements ProductService {
         List<Product> allProduct = new ArrayList<>();
         productIterator.forEachRemaining(allProduct::add);
         return allProduct;
+    }
+
+    @Override
+    public Product findById(String id) {
+        return productRepository.findById(id);
+    }
+    
+    @Override
+    public void save(Product product){
+        productRepository.save(product);
     }
 }
