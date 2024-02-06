@@ -19,4 +19,24 @@ public class ProductRepository {
     public Iterator<Product> findAll() {
         return productData.iterator();
     }
+
+    public Product findById(String id) {
+        for (Product x : productData){
+            if (x.getProductId().equals(id)){
+                return x;
+            }
+        }
+        throw new IllegalArgumentException("Product not found");
+    }
+
+    public void save(Product product) {
+        String id = product.getProductId();
+
+        for (int i = 0; i < productData.size(); i++) {
+            if (productData.get(i).getProductId().equals(id)) {
+                productData.set(i, product);
+                return;
+            }
+        }
+    }
 }
