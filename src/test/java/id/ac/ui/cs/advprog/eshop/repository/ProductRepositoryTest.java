@@ -63,4 +63,113 @@ class ProductRepositoryTest {
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertFalse(productIterator.hasNext());
     }
+
+    @Test
+    void testEditProduct() {
+        Product dummyProduct = new Product();
+        dummyProduct.setProductId("512");
+        dummyProduct.setProductName("Sampo Cap Bambang");
+        dummyProduct.setProductQuantity(100);
+        productRepository.create(dummyProduct);
+
+        dummyProduct = productRepository.findById("512");
+        dummyProduct.setProductName("Claymore");
+        dummyProduct.setProductQuantity(50);
+        productRepository.save(dummyProduct);
+
+        dummyProduct = productRepository.findById("512");
+        assertEquals(dummyProduct.getProductId(), "512");
+        assertEquals(dummyProduct.getProductName(), "Claymore");
+        assertEquals(dummyProduct.getProductQuantity(), 50);
+    }
+
+    @Test
+    void testEditProductFailed() {
+        Product dummyProduct = new Product();
+        dummyProduct.setProductName("Sampo Cap Bambang");
+        dummyProduct.setProductQuantity(100);
+        productRepository.create(dummyProduct);
+
+        assertThrows(NullPointerException.class, () -> productRepository.findById("512"));
+    }
+    
+    @Test
+    void testDeleteProduct(){
+        Product dummyProduct = new Product();
+        dummyProduct.setProductId("512");
+        dummyProduct.setProductName("Sampo Penrose");
+        dummyProduct.setProductQuantity(6);
+        productRepository.create(dummyProduct);
+
+        productRepository.deleteProduct("512");
+
+        Iterator<Product> iterator = productRepository.findAll();
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void testDeleteFailed(){
+        Product dummyProduct = new Product();
+        dummyProduct.setProductId("512");
+        dummyProduct.setProductName("Sampo Penrose");
+        dummyProduct.setProductQuantity(1);
+        productRepository.create(dummyProduct);
+
+        productRepository.deleteProduct("500");
+
+        Iterator<Product> iterator = productRepository.findAll();
+        assertTrue(iterator.hasNext());
+    }
+
+    @Test
+    void testDeleteMultiple(){
+        Product dummyProduct1 = new Product();
+        dummyProduct1.setProductId("512");
+        dummyProduct1.setProductName("Sampo Penrose");
+        dummyProduct1.setProductQuantity(1);
+        productRepository.create(dummyProduct1);
+
+        Product dummyProduct2 = new Product();
+        dummyProduct2.setProductId("500");
+        dummyProduct2.setProductName("Sabun Melati");
+        dummyProduct2.setProductQuantity(1);
+        productRepository.create(dummyProduct2);
+
+        productRepository.deleteProduct("512");
+
+        Iterator<Product> iterator = productRepository.findAll();
+        boolean checker = true;
+        while (iterator.hasNext()){
+            if (iterator.next().getProductId().equals("512")){
+                checker = false;
+            }
+        }
+        assertTrue(checker);
+    }
+
+    @Test
+    void testDeleteMultipleFailed(){
+        Product dummyProduct1 = new Product();
+        dummyProduct1.setProductId("512");
+        dummyProduct1.setProductName("Sampo Penrose");
+        dummyProduct1.setProductQuantity(1);
+        productRepository.create(dummyProduct1);
+
+        Product dummyProduct2 = new Product();
+        dummyProduct2.setProductId("500");
+        dummyProduct2.setProductName("Sabun Melati");
+        dummyProduct2.setProductQuantity(1);
+        productRepository.create(dummyProduct2);
+
+        productRepository.deleteProduct("600");
+
+        Iterator<Product> iterator = productRepository.findAll();
+        boolean checker = true;
+        while (iterator.hasNext()){
+            if (iterator.next().getProductId().equals("512")){
+                checker = false;
+            }
+        }
+        assertFalse(checker);
+    }
 }
