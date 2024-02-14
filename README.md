@@ -22,3 +22,27 @@ How to fix :
     - 100% Code coverage only covers the basic functions. It can maybe cover more complex or niche scenarios but again users are unpredictable.
 
 2.  It will be too wasteful and potentially deter from the clean code mentality, checking a quantity still counts as checking the attribute of a created product like name of product. If I were to add a new functionality test to check the amount of items then I would just combine it with the normal create product functional test, or if the scenario doesn't include the `create` function then I would make a new test in the same java class with combining any similar scenarios in the future to that test.
+
+<br>
+<br>
+
+## Module 2
+# Reflection
+deployment link : https://tutorial-1-eshop-mradhityautomo.koyeb.app/
+
+1. List the code quality issue(s) that you fixed during the exercise and explain your strategy on fixing them.
+
+- Unused/ambiguous .remove(i) usage : My `delete` function has a `.remove` that removes elements from an array while looping it. To fix it I added a boolean trigger instead that will do the intended correct option if the boolean is true.
+- Understanding Mock : I use Mocks and InjectMocks without understanding it beforehand, It didn't create a proper instance of the `productRepository` class inside the `service` testing. I added `when`, `thenReturn`, and `verify` statements from mockito.
+- Sonar detected issues from the table html such as no caption lable, The solution was to add `<caption>` in it.
+- ProductRepository had a problem in the `save` method with no default statement, the solution was to add a default statement and modify the code to have a return value of `product` and made testing easier.
+
+<br>
+
+2. Look at your CI/CD workflows (GitHub)/pipelines (GitLab). Do you think the current implementation has met the definition of Continuous Integration and Continuous Deployment? Explain the reasons (minimum 3 sentences)!
+
+Yes :
+- Continuous Integration : With using ci.yml, the code already has a built in self test mechanism that runs the unit test on push and pull. `Sonar` and `scorecard` also has an inbuilt CI sistem that checks for issues (code cleanliness) after pushing.
+- Continuous Delivery : `Koyeb`, the deployment service I used,  already has an inbuilt CI/CD system in it that helps in issue testing when deploying.
+
+I do acknowledge some of the code for this module might be a bit unclean for the professional eye and I hope to have that vision in the future.
