@@ -41,12 +41,19 @@ public class ProductRepository {
     }
 
     public Product deleteProduct(String id) throws NullPointerException{
+        Product product = new Product();
+        boolean checker = false;
+        int x = 0;
         for (int i = 0; i < productData.size(); i++) {
             if (productData.get(i).getProductId().equals(id)) {
-                Product product = productData.get(i);
-                productData.remove(i);
-                return product;
+                product = productData.get(i);
+                x = i;
+                checker = true;
             }
+        }
+        if (checker) {
+            productData.remove(x);
+            return product;
         }
         throw new NullPointerException("Product not found");
     }
