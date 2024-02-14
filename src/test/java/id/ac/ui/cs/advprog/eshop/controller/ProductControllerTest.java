@@ -46,7 +46,7 @@ class ProductControllerTest {
     void testCreateProductPageMock() throws Exception {
         mockMvc.perform(get("/product/create"))
                .andExpect(status().isOk())
-               .andExpect(view().name("createProduct"))
+               .andExpect(view().name("CreateProduct"))
                .andExpect(model().attributeExists("product"));
     }
 
@@ -71,14 +71,14 @@ class ProductControllerTest {
 
         mockMvc.perform(get("/product/edit/{productId}", "eb558e9f-1c39-460e-8860-71af6af63bd6"))
                .andExpect(status().isOk())
-               .andExpect(view().name("editProduct"))
+               .andExpect(view().name("EditProduct"))
                .andExpect(model().attributeExists("product"));
     }
 
     @Test
     void testCreateProductPage() {
         String viewName = productController.createProductPage(model);
-        assertEquals("createProduct", viewName);
+        assertEquals("CreateProduct", viewName);
         verify(model).addAttribute(eq("product"), any(Product.class));
     }
 
@@ -96,7 +96,7 @@ class ProductControllerTest {
         when(productService.findAll()).thenReturn(productList);
 
         String viewName = productController.productListPage(model);
-        assertEquals("productList", viewName);
+        assertEquals("ProductList", viewName);
         verify(model).addAttribute("products", productList);
     }
 
@@ -108,7 +108,7 @@ class ProductControllerTest {
         when(productService.findById(productId)).thenReturn(product);
 
         String viewName = productController.editProductPage(productId, model);
-        assertEquals("editProduct", viewName);
+        assertEquals("EditProduct", viewName);
         verify(model).addAttribute(eq("product"), any(Product.class));
     }
 
