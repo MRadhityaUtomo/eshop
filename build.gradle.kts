@@ -1,6 +1,7 @@
 plugins {
 	java
 	jacoco
+	id("org.sonarqube") version "4.4.1.3373"
 	id("org.springframework.boot") version "3.2.2"
 	id("io.spring.dependency-management") version "1.1.4"
 }
@@ -10,6 +11,9 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_21
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
 }
 
 configurations {
@@ -22,13 +26,22 @@ repositories {
 	mavenCentral()
 }
 
+sonar {
+	properties {
+		property("sonar.projectKey", "MRadhityaUtomo_tutorial-1")
+		property("sonar.organization", "mradhityautomo")
+		property("sonar.host.url", "https://sonarcloud.io")
+		property ("sonar.login", "89ae7d2a67219f0f7d1d3b6199fee2d844554a8f")
+	}
+}
+
 val seleniumJavaVersion = "4.14.1"
 val seleniumJupiterVersion = "5.0.1"
 val webdrivermanagerVersion = "5.6.3"
 val junitJupiterVersion = "5.9.1"
 
 dependencies {
-implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -60,8 +73,12 @@ tasks.register<Test>("functionalTest") {
 	}
 }
 
-tasks.test{
-	filter{
+tasks.withType<Test>().configureEach {
+	useJUnitPlatform()
+}
+
+tasks.test {
+	filter {
 		excludeTestsMatching("*FunctionalTest")
 	}
 
@@ -70,8 +87,8 @@ tasks.test{
 
 tasks.jacocoTestReport {
 	dependsOn(tasks.test)
-}
-
-tasks.withType<Test>().configureEach {
-	useJUnitPlatform()
+	reports {
+		xml.required.set(true)
+		csv.required.set(true)
+	}
 }

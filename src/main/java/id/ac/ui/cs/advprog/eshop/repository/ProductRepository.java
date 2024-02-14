@@ -20,32 +20,41 @@ public class ProductRepository {
         return productData.iterator();
     }
 
-    public Product findById(String id) {
+    public Product findById(String id) throws NullPointerException{
         for (Product x : productData){
             if (x.getProductId().equals(id)){
                 return x;
             }
         }
-        throw new IllegalArgumentException("Product not found");
+        throw new NullPointerException("Product not found");
     }
 
-    public void save(Product product) {
+    public Product save(Product product) {
         String id = product.getProductId();
 
         for (int i = 0; i < productData.size(); i++) {
             if (productData.get(i).getProductId().equals(id)) {
                 productData.set(i, product);
-                return;
             }
         }
+        return product;
     }
 
-    public void deleteProduct(String id) {
+    public Product deleteProduct(String id) throws NullPointerException{
+        Product product = new Product();
+        boolean checker = false;
+        int x = 0;
         for (int i = 0; i < productData.size(); i++) {
             if (productData.get(i).getProductId().equals(id)) {
-                productData.remove(i);
-                return;
+                product = productData.get(i);
+                x = i;
+                checker = true;
             }
         }
+        if (checker) {
+            productData.remove(x);
+            return product;
+        }
+        throw new NullPointerException("Product not found");
     }
 }
