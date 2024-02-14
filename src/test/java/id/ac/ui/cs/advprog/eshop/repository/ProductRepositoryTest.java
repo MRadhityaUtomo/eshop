@@ -1,12 +1,12 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Iterator;
 
@@ -86,6 +86,7 @@ class ProductRepositoryTest {
     @Test
     void testEditProductFailed() {
         Product dummyProduct = new Product();
+        dummyProduct.setProductId("1");
         dummyProduct.setProductName("Sampo Cap Bambang");
         dummyProduct.setProductQuantity(100);
         productRepository.create(dummyProduct);
@@ -105,20 +106,6 @@ class ProductRepositoryTest {
 
         Iterator<Product> iterator = productRepository.findAll();
         assertFalse(iterator.hasNext());
-    }
-
-    @Test
-    void testDeleteFailed(){
-        Product dummyProduct = new Product();
-        dummyProduct.setProductId("512");
-        dummyProduct.setProductName("Sampo Penrose");
-        dummyProduct.setProductQuantity(1);
-        productRepository.create(dummyProduct);
-
-        productRepository.deleteProduct("500");
-
-        Iterator<Product> iterator = productRepository.findAll();
-        assertTrue(iterator.hasNext());
     }
 
     @Test
@@ -161,7 +148,7 @@ class ProductRepositoryTest {
         dummyProduct2.setProductQuantity(1);
         productRepository.create(dummyProduct2);
 
-        productRepository.deleteProduct("600");
+        assertThrows(NullPointerException.class, () -> productRepository.deleteProduct("600"));
 
         Iterator<Product> iterator = productRepository.findAll();
         boolean checker = true;
@@ -172,4 +159,19 @@ class ProductRepositoryTest {
         }
         assertFalse(checker);
     }
+
+    @Test
+    void testDeleteFailed(){
+        Product dummyProduct = new Product();
+        dummyProduct.setProductId("512");
+        dummyProduct.setProductName("Sampo Penrose");
+        dummyProduct.setProductQuantity(1);
+        productRepository.create(dummyProduct);
+
+        assertThrows(NullPointerException.class, () -> productRepository.deleteProduct("500"));
+
+        Iterator<Product> iterator = productRepository.findAll();
+        assertTrue(iterator.hasNext());
+    }
+
 }
