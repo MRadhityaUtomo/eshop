@@ -35,6 +35,7 @@ class ProductServiceTest {
     @Test
     void testEditProductByService() {
         Product dummyProduct = new Product();
+        dummyProduct.setProductId("512");
         dummyProduct.setProductName("Sampo Cap Bambang");
         dummyProduct.setProductQuantity(100);
         service.create(dummyProduct);
@@ -43,7 +44,7 @@ class ProductServiceTest {
         dummyProduct.setProductQuantity(50);
         service.save(dummyProduct);
 
-        assertEquals(dummyProduct.getProductId(), "1");
+        assertEquals(dummyProduct.getProductId(), "512");
         assertEquals(dummyProduct.getProductName(), "Claymore");
         assertEquals(dummyProduct.getProductQuantity(), 50);
     }

@@ -34,20 +34,18 @@ public class CarRepository {
     }
 
     public Car update(String id, Car updatedCar) {
-        for (int i = 0; i < carData.size(); i++) {
-            Car car = carData.get(i);
-            if (car.equals(id)) {
-                // Update information of car
-                car.setCarName(updatedCar.getCarName());
-                car.setCarColor(updatedCar.getCarColor());
-                car.setCarQuantity(updatedCar.getCarQuantity());
-                return car;
-            }
+        Car requestedCar = findById(id);
+        if (requestedCar != null){
+            // Update information of car
+            requestedCar.setCarName(updatedCar.getCarName());
+            requestedCar.setCarColor(updatedCar.getCarColor());
+            requestedCar.setCarQuantity(updatedCar.getCarQuantity());
+            return requestedCar;
         }
         return null; // Handle the case where the car is not found
     }
 
     public void delete(String id) { 
-        carData.removeIf(car -> car.getCarId().equals(id));
+        carData.remove(findById(id));
     }
 }
