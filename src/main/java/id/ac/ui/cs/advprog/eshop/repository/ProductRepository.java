@@ -6,12 +6,18 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class ProductRepository {
+    static int id = 0;
     private List<Product> productData = new ArrayList<>();
 
     public Product create(Product product) {
+        if(product.getProductId() == null){
+            UUID uuid = UUID.randomUUID();
+            product.setProductId(uuid.toString());
+        }
         productData.add(product);
         return product;
     }
@@ -31,28 +37,19 @@ public class ProductRepository {
 
     public Product save(Product product) {
         String id = product.getProductId();
-
-        for (int i = 0; i < productData.size(); i++) {
-            if (productData.get(i).getProductId().equals(id)) {
-                productData.set(i, product);
-            }
-        }
+        Product requestedProduct = findById(id);
+        requestedProduct.setProductName(product.getProductName());
+        requestedProduct.setProductQuantity(product.getProductQuantity());
         return product;
     }
 
     public Product deleteProduct(String id) throws NullPointerException{
         Product product = new Product();
         boolean checker = false;
-        int x = 0;
-        for (int i = 0; i < productData.size(); i++) {
-            if (productData.get(i).getProductId().equals(id)) {
-                product = productData.get(i);
-                x = i;
-                checker = true;
-            }
-        }
+        Product requestedProduct = findById(id);
+        if (requestedProduct != null){ checker = true; }
         if (checker) {
-            productData.remove(x);
+            productData.remove(requestedProduct);
             return product;
         }
         throw new NullPointerException("Product not found");

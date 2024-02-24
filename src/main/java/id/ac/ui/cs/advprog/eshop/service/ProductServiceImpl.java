@@ -11,14 +11,12 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private long productId = 1;
 
     @Autowired
     private ProductRepository productRepository;
 
     @Override
     public Product create(Product product) {
-        product.setProductId(String.valueOf(productId)); productId++;
         productRepository.create(product);
         return product;
     }
