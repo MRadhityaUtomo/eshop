@@ -1,9 +1,10 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,146 +36,157 @@ class PaymentTest {
         this.products.add(product2);
 
         order = new Order("eb558e9f-1c39-460e-8860-71af6af63bd6", 
-            products, 1708560000L, "Mbak SekaiDe");
+            products, 1708560000L, "Bambang Sugiono");
     }
 
     @Test
+    void testContainsWithValidParam() {
+        assertTrue(PaymentMethod.contains("VOUCHER_CODE"));
+        assertTrue(PaymentMethod.contains("BANK_TRANSFER"));
+    }
+
+    @Test
+    void testContainsWithInvalidParam() {
+        assertFalse(PaymentMethod.contains("INVALID_CODE"));
+    }
+    
+    @Test
     void testCreatePaymentWithNullOrder() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
+            new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
                 "", null, paymentData);
         });
     }
 
     @Test
-    void testCreatePaymentVoucherStatusPending() {
+    void testCreatePaymentVoucherPendingStatus() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.VOUCHER.getValue(), order, paymentData);
         assertSame(payment.getOrder(), order);
-        assertNull(payment.getPaymentData());
-        assertEquals("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", payment.getId());
-        assertEquals("", payment.getMethod());
+        assertSame(paymentData, payment.getPaymentData());
+        assertEquals("e6e60d39-41fb-4ff0-8631-3491e483c180", payment.getId());
+        assertEquals(PaymentMethod.VOUCHER.getValue(), payment.getMethod());
         assertEquals(PaymentStatus.PENDING.getValue(), payment.getStatus());
         paymentData.clear();
     }
-
+    
     @Test
-    void testCreatePaymentVoucherStatusSuccess() {
+    void testCreatePaymentVoucherSuccessStatus() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData, PaymentStatus.SUCCESS.getValue());
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.VOUCHER.getValue(), order, paymentData, PaymentStatus.SUCCESS.getValue());
         assertSame(payment.getOrder(), order);
-        assertNull(payment.getPaymentData());
-        assertEquals("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", payment.getId());
-        assertEquals("", payment.getMethod());
+         assertSame(paymentData, payment.getPaymentData());
+        assertEquals("e6e60d39-41fb-4ff0-8631-3491e483c180", payment.getId());
+        assertEquals(PaymentMethod.VOUCHER.getValue(), payment.getMethod());
         assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
         paymentData.clear();
     }
 
     @Test
-    void testCreatePaymentVoucherStatusRejected() {
+    void testCreatePaymentVoucherRejectedStatus() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
-
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData, PaymentStatus.REJECTED.getValue());
+        
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.VOUCHER.getValue(), order, paymentData, PaymentStatus.REJECTED.getValue());
         assertSame(payment.getOrder(), order);
-        assertNull(payment.getPaymentData());
-        assertEquals("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", payment.getId());
-        assertEquals("", payment.getMethod());
+         assertSame(paymentData, payment.getPaymentData());
+        assertEquals("e6e60d39-41fb-4ff0-8631-3491e483c180", payment.getId());
+        assertEquals(PaymentMethod.VOUCHER.getValue(), payment.getMethod());
         assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
         paymentData.clear();
     }
 
     @Test
-    void testCreatePaymentVoucherStatusInvalid() {
+    void testCreatePaymentVoucherInvalidStatus() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
-
+        
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-                "", order, paymentData, "bazinga");
+            new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+                PaymentMethod.VOUCHER.getValue(), order, paymentData, "PENROSE");
         });
         paymentData.clear();
     }
 
     @Test
-    void testCreatePaymentVoucherStatusNull() {
+    void testCreatePaymentVoucherNullStatus() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-                "", order, paymentData, null);
+            new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+                PaymentMethod.VOUCHER.getValue(), order, paymentData, null);
         });
         paymentData.clear();
     }
 
     @Test
-    void testCreatePaymentBankTransferStatusPending() {
+    void testCreatePaymentBankTransferPendingStatus() {
         paymentData.put("bankName", "MANDIRI");
         paymentData.put("referenceCode", "0123456789");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.BANK.getValue(), order, paymentData);
         assertSame(payment.getOrder(), order);
-        assertNull(payment.getPaymentData());
-        assertEquals("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", payment.getId());
-        assertEquals("", payment.getMethod());
+         assertSame(paymentData, payment.getPaymentData());
+        assertEquals("e6e60d39-41fb-4ff0-8631-3491e483c180", payment.getId());
+        assertEquals(PaymentMethod.BANK.getValue(), payment.getMethod());
         assertEquals(PaymentStatus.PENDING.getValue(), payment.getStatus());
         paymentData.clear();
     }
 
     @Test
-    void testCreatePaymentBankTransferStatusSuccess() {
+    void testCreatePaymentBankTransferSuccessStatus() {
         paymentData.put("bankName", "MANDIRI");
         paymentData.put("referenceCode", "0123456789");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData, PaymentStatus.SUCCESS.getValue());
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.BANK.getValue(), order, paymentData, PaymentStatus.SUCCESS.getValue());
         assertSame(payment.getOrder(), order);
-        assertNull(payment.getPaymentData());
-        assertEquals("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", payment.getId());
-        assertEquals("", payment.getMethod());
+         assertSame(paymentData, payment.getPaymentData());
+        assertEquals("e6e60d39-41fb-4ff0-8631-3491e483c180", payment.getId());
+        assertEquals(PaymentMethod.BANK.getValue(), payment.getMethod());
         assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
         paymentData.clear();
     }
 
     @Test
-    void testCreatePaymentBankTransferStatusRejected() {
+    void testCreatePaymentBankTransferRejectedStatus() {
         paymentData.put("bankName", "MANDIRI");
         paymentData.put("referenceCode", "0123456789");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData, PaymentStatus.REJECTED.getValue());
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.BANK.getValue(), order, paymentData, PaymentStatus.REJECTED.getValue());
         assertSame(payment.getOrder(), order);
-        assertNull(payment.getPaymentData());
-        assertEquals("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", payment.getId());
-        assertEquals("", payment.getMethod());
+         assertSame(paymentData, payment.getPaymentData());
+        assertEquals("e6e60d39-41fb-4ff0-8631-3491e483c180", payment.getId());
+        assertEquals(PaymentMethod.BANK.getValue(), payment.getMethod());
         assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
         paymentData.clear();
     }
 
     @Test
-    void testCreatePaymentBankTransferStatusInvalid() {
+    void testCreatePaymentBankTransferInvalidStatus() {
         paymentData.put("bankName", "MANDIRI");
         paymentData.put("referenceCode", "0123456789");
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-                "", order, paymentData, "bazinga");
+            new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+                PaymentMethod.BANK.getValue(), order, paymentData, "PENROSE");
         });
         paymentData.clear();
     }
 
     @Test
-    void testCreatePaymentBankTransferStatusNull() {
+    void testCreatePaymentBankTransferNullStatus() {
         paymentData.put("bankName", "MANDIRI");
         paymentData.put("referenceCode", "0123456789");
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-                "", order, paymentData, null);
+            new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+                PaymentMethod.BANK.getValue(), order, paymentData, null);
         });
         paymentData.clear();
     }
@@ -183,8 +195,8 @@ class PaymentTest {
     void testSetStatusPaymentVoucherToSuccess() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.VOUCHER.getValue(), order, paymentData);
         payment.setStatus(PaymentStatus.SUCCESS.getValue());
         assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
         paymentData.clear();
@@ -194,8 +206,8 @@ class PaymentTest {
     void testSetStatusPaymentVoucherToRejected() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.VOUCHER.getValue(), order, paymentData);
         payment.setStatus(PaymentStatus.REJECTED.getValue());
         assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
         paymentData.clear();
@@ -205,10 +217,10 @@ class PaymentTest {
     void testSetStatusPaymentVoucherToInvalidStatus() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.VOUCHER.getValue(), order, paymentData);
         assertThrows(IllegalArgumentException.class, () -> {
-            payment.setStatus("bazinga");
+            payment.setStatus("PENROSE");
         });
         paymentData.clear();
     }
@@ -217,8 +229,8 @@ class PaymentTest {
     void testSetStatusPaymentVoucherToNullStatus() {
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.VOUCHER.getValue(), order, paymentData);
         assertThrows(IllegalArgumentException.class, () -> {
             payment.setStatus(null);
         });
@@ -230,8 +242,8 @@ class PaymentTest {
         paymentData.put("bankName", "MANDIRI");
         paymentData.put("referenceCode", "0123456789");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.BANK.getValue(), order, paymentData);
         payment.setStatus(PaymentStatus.SUCCESS.getValue());
         assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
         paymentData.clear();
@@ -242,8 +254,8 @@ class PaymentTest {
         paymentData.put("bankName", "MANDIRI");
         paymentData.put("referenceCode", "0123456789");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.BANK.getValue(), order, paymentData);
         payment.setStatus(PaymentStatus.REJECTED.getValue());
         assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
         paymentData.clear();
@@ -254,10 +266,10 @@ class PaymentTest {
         paymentData.put("bankName", "MANDIRI");
         paymentData.put("referenceCode", "0123456789");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.BANK.getValue(), order, paymentData);
         assertThrows(IllegalArgumentException.class, () -> {
-            payment.setStatus("bazinga");
+            payment.setStatus("PENROSE");
         });
         paymentData.clear();
     }
@@ -267,8 +279,8 @@ class PaymentTest {
         paymentData.put("bankName", "MANDIRI");
         paymentData.put("referenceCode", "0123456789");
 
-        Payment payment = new Payment("a7c8124f-67d3-4a22-9e45-8f6b7d2e9f55", 
-            "", order, paymentData);
+        Payment payment = new Payment("e6e60d39-41fb-4ff0-8631-3491e483c180", 
+            PaymentMethod.BANK.getValue(), order, paymentData);
         assertThrows(IllegalArgumentException.class, () -> {
             payment.setStatus(null);
         });

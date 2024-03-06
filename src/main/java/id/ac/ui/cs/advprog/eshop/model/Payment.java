@@ -13,10 +13,9 @@ public class Payment {
     String method;
     Order order;
     Map<String, String> paymentData;
-
     String status;
 
-    public Payment(String id, String method, Order order, Map<String, String> paymentData, String Status) {
+    public Payment(String id, String method, Order order, Map<String, String> paymentData, String status) {
         this.id = id;
         this.method = method;
         this.setOrder(order);
@@ -24,16 +23,15 @@ public class Payment {
         this.setStatus(status);
     }
 
-
     public Payment(String id, String method, Order order, Map<String, String> paymentData) {
-          this(id, method, order, paymentData, PaymentStatus.PENDING.getValue());
+        this(id, method, order, paymentData, PaymentStatus.PENDING.getValue());
     }
 
     private void setOrder(Order order) {
         if (order != null) {
             this.order = order;
         } else {
-            throw new IllegalArgumentException("Order must not be null");
+            throw new IllegalArgumentException("Order cannot be null");
         }
     }
 
@@ -41,7 +39,7 @@ public class Payment {
         if (PaymentStatus.contains(status)) {
             this.status = status;
         } else {
-            throw new IllegalArgumentException("Payment status Invalid");
+            throw new IllegalArgumentException("Invalid payment status");
         }
     }
 
@@ -49,7 +47,7 @@ public class Payment {
         if (PaymentMethod.contains(this.method)) {
             this.paymentData = paymentData;
         } else {
-            throw new IllegalArgumentException("Payment method is not specified. Unable to assign payment data specific to a method");
+            throw new IllegalArgumentException("Unable to assign payment data specific to a method when the payment method is not specified");
         }
     }
 }
