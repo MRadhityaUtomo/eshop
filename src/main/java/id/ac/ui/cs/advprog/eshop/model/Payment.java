@@ -5,7 +5,6 @@ import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 
 import lombok.Getter;
 
-
 import java.util.Map;
 
 @Getter
@@ -31,25 +30,26 @@ public class Payment {
     }
 
     private void setOrder(Order order) {
-        if (order == null) {
+        if (order != null) {
+            this.order = order;
+        } else {
             throw new IllegalArgumentException("Order must not be null");
         }
-        this.order = order;
     }
 
     public void setStatus(String status) {
-        if (!PaymentStatus.contains(status)) {
-            throw new IllegalArgumentException("Invalid payment status");
+        if (PaymentStatus.contains(status)) {
+            this.status = status;
+        } else {
+            throw new IllegalArgumentException("Payment status Invalid");
         }
-        this.status = status;
     }
 
     protected void setPaymentData(Map<String, String> paymentData) {
         if (PaymentMethod.contains(this.method)) {
-            throw new IllegalArgumentException(
-                "Unable to assign payment data specific to a method when the payment method is not specified"
-            );
+            this.paymentData = paymentData;
+        } else {
+            throw new IllegalArgumentException("Payment method is not specified. Unable to assign payment data specific to a method");
         }
-        this.paymentData = null;
     }
 }
