@@ -132,3 +132,21 @@ class CarController{
 - ISP : Code becomes entangled and harder to read due to seperate implementations having methods they aren't even using. (previous example, in the future the Car implementation might have a refill gas method which product does not need).
 
 - DIP : Code becomes too dependent on eachother's concrete classes thus making it hard to implement fixes, patches, or updates i.e. if `CarController.java` relies on another concrete module `Serviceimpl` then it creates a back and forth of adjustments when updates occur.
+
+<br>
+<br>
+
+# Module 4
+## Reflection
+
+1. Reflect based on Percival (2017) proposed self-reflective questions (in “Principles and Best Practice of Testing” submodule, chapter “Evaluating Your Testing Objectives”), whether this TDD flow is useful enough for you or not. If not, explain things that you need to do next time you make more tests.
+
+- The procedure ([RED], [GREEN], [REFACTOR]) surely made me have a structured approach when doing the exercise, even if I wasn't used to it. For beginners it may be confusing why letting an error'd code be committed, but it does make sense where the workflow is identifying the possible flaws of the code first, then applying the main structure (skeleton) to fix some of the basic needs/flaws, then meet (Implementation), and finally refactoring to patch all holes. The flaw of this procedure might be it's lengthy process so in the future I may have to be wary of deadlines when applying it. 
+
+2. You have created unit tests in Tutorial. Now reflect whether your tests have successfully followed F.I.R.S.T. principle or not. If not, explain things that you need to do the next time you create more tests.
+
+- Fast : The code is fast and provides immediate feedback after testing.
+- Isolated/Independent : Tests are independent of one another using mock.
+- Repeatable : The unit tests can be reused for other or future features, of course we can use careful REFACTORS to patch things up
+- Self-Validating Kemudian : With the use of assertions to check the program's output, issues in the code become easily apparent based on the results of each assertion and the overall assertions in the created tests. This makes the tests inherently self-validating.
+- Thorough/Timely : Timely because it was FAST, and thorough because it covers both Happy and Unhappy cases.
