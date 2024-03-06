@@ -34,13 +34,13 @@ class PaymentRepositoryTest {
 
         List<Order> orders = new ArrayList<>();
         Order order1 = new Order("13652556-012a-4c07-b546-54eb1396d79b", 
-            products, 1708560000L, "Artoria Pendragon");
+            products, 1708560000L, "Safira Sudrajat");
         orders.add(order1);
         Order order2 = new Order("7f9e15bb-4b15-42f4-aebc-c3af385fb078",
-            products, 1708570000L, "Jonjina Pendragon");
+            products, 1708570000L, "Safira Sudrajat");
         orders.add(order2);
         Order order3 = new Order("e334ef40-9eff-4da8-9487-8ee697ecbf1e",
-            products, 1708570000L, "Joji Pendragon");
+            products, 1708570000L, "Bambang Sudrajat");
         orders.add(order3);
 
         Map<String, String> paymentDataVoucher = new HashMap<>();
@@ -49,7 +49,7 @@ class PaymentRepositoryTest {
         payments.add(voucher);
 
         Map<String, String> paymentDataBankTransfer = new HashMap<>();
-        paymentDataBankTransfer.put("bankName", "BNI");
+        paymentDataBankTransfer.put("bankName", "MANDIRI");
         paymentDataBankTransfer.put("referenceCode", "0123456789");
         Payment bankTransfer = new Payment("ec556e96-10a5-4d47-a068-d45c6fca71c0", PaymentMethod.BANK.getValue(), orders.get(0), paymentDataBankTransfer, PaymentStatus.PENDING.getValue());
         payments.add(bankTransfer);
@@ -100,7 +100,7 @@ class PaymentRepositoryTest {
             paymentRepository.save(payment);
         }
 
-        Payment findResult = paymentRepository.findById("512p");
+        Payment findResult = paymentRepository.findById("zczc");
         assertNull(findResult);
     }
 

@@ -30,7 +30,7 @@ class PaymentTest {
 
         Product product2 = new Product();
         product2.setProductId("a2c62328-4a37-4664-83c7-f32db8620155");
-        product2.setProductName("Sabun Cap Miku");
+        product2.setProductName("Sabun Cap Usep");
         product2.setProductQuantity(1);
         this.products.add(product2);
 
